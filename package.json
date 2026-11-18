@@ -1,0 +1,22 @@
+{
+  "name": "knowledgebase-ai",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Production-grade RAG and LLM backend built from first principles",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/dotenv": "^6.1.1",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^2.1.0"
+  },
+  "dependencies": {
+    "@google/genai": "^3.6.0",
+    "dotenv": "^18.0.10"
+  }
+}
