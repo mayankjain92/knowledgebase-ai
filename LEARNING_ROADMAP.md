@@ -46,9 +46,11 @@ flowchart TD
   - Metadata enrichment (source, page, timestamp, parent-child links)
   - Embedding generation with rate limiting and batching (Gemini Embedding API)
 * **Milestone**:
-  - [ ] Build a modular document processor in TypeScript without external RAG frameworks
-  - [ ] Implement and compare fixed vs. recursive chunking on real documents
-  - [ ] Extract and embed chunks with error handling and backoff
+  - [x] Build a modular recursive character chunker in TypeScript without external RAG frameworks
+  - [x] Connect chunking pipeline to batch embedding generation and metadata enrichment
+  - [x] Implement text sanitization and cleaning (control chars, null bytes, line wraps, whitespace)
+  - [x] Implement file extraction (Markdown/Plaintext/PDF)
+  - [x] Knowledge verification questions passed
 
 ---
 
