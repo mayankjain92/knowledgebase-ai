@@ -7,13 +7,15 @@
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "demo": "tsx src/demo.ts"
   },
   "devDependencies": {
     "@types/dotenv": "^6.1.1",
     "@types/node": "^22.0.0",
     "@types/pdf-parse": "^1.1.5",
     "@types/pg": "^8.23.1",
+    "tsx": "^4.23.15",
     "typescript": "^5.6.0",
     "vitest": "^2.1.0"
   },

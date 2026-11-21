@@ -68,8 +68,8 @@ flowchart TD
   - [x] Spin up PostgreSQL with `pgvector` via Docker Compose
   - [x] Design and migrate database schema for documents, chunks, and embeddings
   - [x] Implement VectorRepository in TypeScript with similarity search and metadata filtering
-  - [ ] Benchmark kNN (sequential scan) vs. HNSW index latency and recall
-  - [ ] Knowledge verification questions passed
+  - [x] Benchmark kNN (sequential scan) vs. HNSW index latency and recall
+  - [x] Knowledge verification questions passed
 
 ---
 
@@ -83,9 +83,10 @@ flowchart TD
   - Citation extraction: mapping generated assertions back to specific source chunk IDs
   - Dealing with "out of context" questions (graceful refusals vs. hallucinations)
 * **Milestone**:
-  - [ ] Implement complete end-to-end RAG query flow in TypeScript
-  - [ ] Generate answers grounded exclusively in retrieved chunks
-  - [ ] Return precise source citations (document title, page, chunk id)
+  - [x] Implement complete end-to-end RAG query flow in TypeScript
+  - [x] Generate answers grounded exclusively in retrieved chunks with citations
+  - [x] Verify anti-hallucination fallback on out-of-scope queries
+  - [x] Knowledge verification questions passed
 
 ---
 

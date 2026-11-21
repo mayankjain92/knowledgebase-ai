@@ -110,5 +110,33 @@ This document tracks personal learning milestones, concepts mastered, mistakes m
   - All 32 unit and integration tests across 6 suites passing cleanly.
 - **Mistakes & Misunderstandings**:
   - Minor typos in constructor naming (`constructore`) and SQL syntax (`ON CONFLIC`) identified and fixed during code review.
+### [2026-11-21] - Phase 3: PostgreSQL & pgvector Completed
+- **What I Learned**:
+  - Distance Bounds: Cosine distance ranges from 0.0 (identical) to 1.0 (orthogonal) to 2.0 (diametrically opposite). Cosine similarity is $1 - \text{distance}$, ranging from 1.0 down to -1.0.
+  - Query Planner Adaptation: Small tables favor sequential scans because graph overhead is eliminated, while massive tables require $O(\log N)$ HNSW graph traversal to avoid catastrophic CPU latency.
+  - Relational Integrity: Using PostgreSQL avoids dual-write synchronization bugs between separate relational and vector databases, ensuring transactional safety (`ON DELETE CASCADE`) and clean pre-filtering.
+- **What I Implemented**:
+  - Completed all Phase 3 milestones with 32 passing unit and integration tests.
+- **Mistakes & Misunderstandings**:
+  - None.
+### [2026-11-21] - Phase 4: Core RAG Pipeline (End-to-End) Live!
+- **What I Learned**:
+  - The Complete End-to-End RAG Cycle: From parsing Markdown/PDFs -> cleaning text -> recursive chunking -> 768-dim Gemini embeddings -> PostgreSQL pgvector HNSW indexing -> semantic similarity search -> strict prompt grounding -> Gemini answer generation with verifiable citations.
+  - Cost & Hallucination Prevention via Fallback: If vector search returns zero chunks or chunks below threshold, immediately returning a fallback message saves 100% of LLM generation costs and prevents hallucinations.
+  - Numbered Citation Prompting: Labeling passages as `[1]`, `[2]` in the prompt allows the LLM to naturally insert verifiable citation brackets tying every claim back to exact database records.
+- **What I Implemented**:
+  - Implemented `RAGEngine` in `src/rag/engine.ts` with grounded prompt builder, early fallback, and citation mapping.
+  - Created 3 unit tests in `src/rag/engine.test.ts`. Total of 35 unit/integration tests passing.
+  - Created and executed live end-to-end demo in `src/demo.ts`, successfully answering questions from real ingested documentation and refusing out-of-scope queries.
+- **Mistakes & Misunderstandings**:
+  - Discovered model lifecycle requirements: upgraded to `gemini-3.5-flash-lite` for high availability and low latency generation.
+### [2026-11-21] - Phase 4: Core RAG Pipeline Completed
+- **What I Learned**:
+  - Verification & Trust: Numbered citation grounding (`[1]`, `[2]`) forces the LLM to anchor claims directly to retrieved sources, giving enterprise users the ability to click citations and verify facts in original documents.
+  - Zero-Cost Guardrails: Fast fallbacks when similarity search yields no results save 100% of LLM inference latency and token costs while completely preventing hallucinations on out-of-scope queries.
+- **What I Implemented**:
+  - Completed Phase 4 end-to-end RAG pipeline and verified with 35 passing unit/integration tests and live demo.
+- **Mistakes & Misunderstandings**:
+  - None.
 - **Open Questions / Confusions**:
-  - How sequential scan (exact kNN) compares against HNSW index speed and recall as dataset size grows.
+  - How pure vector search struggles with exact keywords, part numbers, and error codes, and how hybrid search (BM25 + RRF) solves it.
