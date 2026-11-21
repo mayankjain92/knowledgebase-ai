@@ -144,3 +144,18 @@ This document tracks personal learning milestones, concepts mastered, mistakes m
   - Rationale: Building a visible, usable full-stack application with file uploads, real-time token streaming, and clickable citation UI provides immediate portfolio value for 2026 AI Application Engineer roles. Furthermore, experiencing search failure modes live in the UI makes hybrid search and reranking far more intuitive to implement as concrete feature upgrades later.
 - **What I Implemented**:
   - Updated `LEARNING_ROADMAP.md` establishing Phase 4.5 and Phase 4.6.
+
+### [2026-11-22] - Phase 4.5: Production Express API & Streaming Completed
+- **What I Learned**:
+  - **Shared Singleton Architecture**: Instantiating stateful services (especially PostgreSQL connection pools via `PgVectorStore`) inside individual controller files creates competing connection pools. Centralizing singletons in `src/api/services.ts` ensures a single shared database pool and unified resource management.
+  - **Server-Sent Events (SSE) Protocol**: Why SSE is superior to WebSockets for LLM chat. It operates over standard HTTP/1.1 or HTTP/2 without stateful socket negotiation or proxy friction. Wire protocol (`event: <name>\ndata: <json>\n\n`) cleanly handles sending citations first, followed by real-time token chunks, and a completion event (`done`).
+  - **Node.js Response Streaming**: Using `res.flushHeaders()` and `res.write()` with `for await (const chunk of stream)` provides immediate Time-To-First-Token (TTFT) reduction for end users.
+- **What I Implemented**:
+  - Created `src/api/services.ts` housing application singletons.
+  - Implemented `src/api/controllers/chat.controller.ts` with `chat` (JSON) and `chatStream` (SSE).
+  - Implemented `src/api/routes/chat.routes.ts` and mounted `/api/chat` in `src/api/server.ts`.
+  - Added `src/api/api.test.ts` integration test suite using `supertest` verifying health, input validation, and document listing.
+  - All 39 tests passing across 8 test suites.
+  - Verified live SSE streaming against PostgreSQL and Gemini with real-time token output.
+- **Mistakes & Misunderstandings**:
+  - Understood the importance of checking `res.headersSent` before sending error responses during streaming: once headers are sent as `text/event-stream`, HTTP status cannot be changed to 500, so errors must be piped as SSE events.

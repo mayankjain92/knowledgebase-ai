@@ -1,19 +1,5 @@
 import { Request, Response } from "express";
-import { RecursiveCharacterChunker } from "../../ingestion/chunker.js";
-import { TextCleaner } from "../../ingestion/cleaner.js";
-import { DocumentParser } from "../../ingestion/parser.js";
-import { IngestionPipeline } from "../../ingestion/pipeline.js";
-import { RAGEngine } from "../../rag/engine.js";
-import { GeminiEmbeddingService } from "../../services/embeddings.js";
-import { PgVectorStore } from "../../storage/vector-store.js";
-
-const parser = new DocumentParser();
-const cleaner = new TextCleaner();
-const chunker = new RecursiveCharacterChunker();
-const embedder = new GeminiEmbeddingService();
-const vectorStore = new PgVectorStore();
-const pipeline = new IngestionPipeline(chunker, embedder, cleaner);
-const ragEngine = new RAGEngine(embedder, vectorStore);
+import { parser, pipeline, vectorStore } from "../services.js";
 
 export const uploadDocument = async (req: Request, res: Response) => {
   try {

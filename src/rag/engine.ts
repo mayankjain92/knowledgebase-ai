@@ -17,8 +17,18 @@ export interface RAGResponse {
   citations: SearchResult[];
 }
 
+export interface RAGStreamResponse {
+  query: string;
+  citations: SearchResult[];
+  stream: AsyncIterable<any> | null;
+}
+
 export interface IRAGEngine {
   answer(query: string, options?: RAGQueryOptions): Promise<RAGResponse>;
+  answerStream(
+    query: string,
+    options?: RAGQueryOptions,
+  ): Promise<RAGStreamResponse>;
 }
 
 export class RAGEngine implements IRAGEngine {
@@ -112,5 +122,39 @@ GROUNDED ANSWER (with [citations]):`;
       answer: answerText,
       citations,
     };
+  }
+
+  async answerStream(
+    query: string,
+    options?: RAGQueryOptions,
+  ): Promise<RAGStreamResponse> {
+    if (!query || query.length === 0)
+      throw new Error("Query must not be empty");
+
+    const queryVector = await this.embeddingService.embedQuery(query);
+    const citations = await this.vectorStore.similaritySearch(
+      queryVector,
+      options,
+    );
+
+    if (citations.length === 0) {
+      return {
+        query,
+        citations: [],
+        stream: null,
+      };
+    }
+
+    const prompt = this.buildPrompt(
+      query,
+      citations,
+      options?.systemInstruction,
+    );
+
+    const stream = await this.ai.models.generateContentStream({
+      model: options?.model || this.defaultModel,
+      contents: prompt,
+    });
+    return { query, citations, stream };
   }
 }

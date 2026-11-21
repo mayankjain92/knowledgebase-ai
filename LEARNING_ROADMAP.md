@@ -92,7 +92,7 @@ flowchart TD
 
 ---
 
-### Phase 4.5: Production Express API & Streaming (Current)
+### Phase 4.5: Production Express API & Streaming
 * **Goal**: Expose ingestion and RAG engines via a typed REST API with real-time Server-Sent Events (SSE) token streaming.
 * **Prerequisites**: Express, Node.js streams, HTTP fundamentals.
 * **Concepts**:
@@ -101,16 +101,16 @@ flowchart TD
   - Structured error handling and graceful database shutdowns
   - RESTful document lifecycle management (`/api/documents`)
 * **Milestone**:
-  - [ ] Set up Express app with CORS and JSON middleware
-  - [ ] Implement `POST /api/documents/upload` (accepts PDF/MD/TXT, ingests into pgvector)
-  - [ ] Implement `GET /api/documents` and `DELETE /api/documents/:id`
-  - [ ] Implement `POST /api/chat` (standard JSON Q&A)
-  - [ ] Implement `GET /api/chat/stream` or `POST /api/chat/stream` (real-time SSE streaming)
-  - [ ] Automated integration test suite for API endpoints
+  - [x] Set up Express app with CORS and JSON middleware
+  - [x] Implement `POST /api/documents/upload` (accepts PDF/MD/TXT, ingests into pgvector)
+  - [x] Implement `GET /api/documents` and `DELETE /api/documents/:id`
+  - [x] Implement `POST /api/chat` (standard JSON Q&A)
+  - [x] Implement `POST /api/chat/stream` (real-time SSE streaming)
+  - [x] Automated integration test suite for API endpoints
 
 ---
 
-### Phase 4.6: Next.js Interactive Frontend
+### Phase 4.6: Next.js Interactive Frontend (Current)
 * **Goal**: Build a clean, responsive UI with drag-and-drop file upload, live chat streaming, and clickable citations.
 * **Prerequisites**: React, Next.js App Router, Tailwind CSS.
 * **Concepts**:
