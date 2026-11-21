@@ -65,9 +65,11 @@ flowchart TD
   - Index tuning parameters: `m`, `ef_construction`, `ef_search`, `lists`, `probes`
   - Combining relational filtering (WHERE clauses) with vector similarity (pre-filtering vs. post-filtering)
 * **Milestone**:
-  - [ ] Spin up PostgreSQL with `pgvector` via Docker Compose
-  - [ ] Design and migrate database schema for documents, chunks, and embeddings
+  - [x] Spin up PostgreSQL with `pgvector` via Docker Compose
+  - [x] Design and migrate database schema for documents, chunks, and embeddings
+  - [x] Implement VectorRepository in TypeScript with similarity search and metadata filtering
   - [ ] Benchmark kNN (sequential scan) vs. HNSW index latency and recall
+  - [ ] Knowledge verification questions passed
 
 ---
 

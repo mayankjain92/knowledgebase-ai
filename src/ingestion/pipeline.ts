@@ -4,7 +4,7 @@ import { ITextCleaner, TextCleaner } from "./cleaner.js";
 
 export interface IngestionDocument {
   id: string;
-  title: string;
+  title: string;        
   content: string;
   metadata?: Record<string, unknown>;
 }

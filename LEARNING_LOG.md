@@ -85,5 +85,30 @@ This document tracks personal learning milestones, concepts mastered, mistakes m
   - Completed all Phase 2 milestones and verified with 29 passing unit tests.
 - **Mistakes & Misunderstandings**:
   - None.
+### [2026-11-18] - Phase 3: PostgreSQL & pgvector Infrastructure Initialized
+- **What I Learned**:
+  - Exact kNN vs. Approximate Nearest Neighbor (ANN): Why sequential scans ($O(N \cdot d)$) degrade as tables grow to hundreds of thousands of rows, and why graph-based indexes (HNSW) trade negligible recall accuracy for sub-millisecond retrieval.
+  - HNSW Index Construction Parameters:
+    - `m`: Maximum number of bidirectional links per node (e.g. 16). Higher $m$ improves recall on high-dimensional data at the cost of index build time and memory.
+    - `ef_construction`: Size of the dynamic candidate list during graph creation (e.g. 64). Controls index quality.
+  - Relational + Vector Hybrid Schemas: Storing documents and chunks in standard relational tables with foreign keys and JSONB GIN indexes allows combining vector similarity with relational filters (`document_id`, `department`, `created_at`).
+- **What I Implemented**:
+  - Created `docker-compose.yml` with `pgvector/pgvector:pg16` mapped to port 5433.
+  - Created `migrations/001_init.sql` with `vector(768)` type, HNSW vector index (`vector_cosine_ops`), and JSONB metadata index.
+  - Successfully verified live running PostgreSQL instance with active vector extension and HNSW index.
+- **Mistakes & Misunderstandings**:
+  - Identified host port conflict on 5432 (local postgres running) and cleanly routed container to 5433.
+### [2026-11-21] - Phase 3: PgVectorStore Repository & Live Integration
+- **What I Learned**:
+  - Vector Serialization in SQL: In PostgreSQL `pgvector`, vectors must be passed as bracketed strings `'[0.1, 0.2, ...]'`.
+  - Live HNSW Index Traversal: Running `ORDER BY embedding <=> $1 ASC LIMIT $3` executes approximate nearest neighbor search directly in the database, calculating distance and similarity in milliseconds.
+  - Relational Pre-filtering: Combining `WHERE ($2::varchar IS NULL OR document_id = $2)` with vector distance allows scoping semantic search to specific documents or tenants without needing separate vector databases.
+  - Foreign Key Cascades: Defining `ON DELETE CASCADE` on `document_chunks.document_id` ensures that deleting a parent document record automatically purges all of its associated vector chunks.
+- **What I Implemented**:
+  - Implemented `PgVectorStore` in `src/storage/vector-store.ts` implementing `IVectorStore`.
+  - Added live integration test in `src/storage/vector-store.test.ts` testing document insertion, chunk persistence, cosine similarity retrieval, relational document filtering, and cascading deletion.
+  - All 32 unit and integration tests across 6 suites passing cleanly.
+- **Mistakes & Misunderstandings**:
+  - Minor typos in constructor naming (`constructore`) and SQL syntax (`ON CONFLIC`) identified and fixed during code review.
 - **Open Questions / Confusions**:
-  - How pgvector stores 768-dim vectors in PostgreSQL pages and how HNSW graph indexing achieves sub-millisecond search.
+  - How sequential scan (exact kNN) compares against HNSW index speed and recall as dataset size grows.
