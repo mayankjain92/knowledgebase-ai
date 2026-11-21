@@ -29,6 +29,7 @@ export interface IVectorStore {
     options?: SearchOptions,
   ): Promise<SearchResult[]>;
   deleteDocument(documentId: string): Promise<void>;
+  listDocument(): Promise<any[]>;
   close(): Promise<void>;
 }
 
@@ -124,6 +125,14 @@ export class PgVectorStore implements IVectorStore {
 
   async deleteDocument(documentId: string): Promise<void> {
     await this.pool.query("DELETE FROM documents WHERE id = $1;", [documentId]);
+  }
+
+  async listDocument(): Promise<any[]> {
+    const query = `SELECT d.id, d.title, d.format, d.total_pages, d.created_at, count(c.id)::int as chunk_count FROM documents d LEFT JOIN document_chunks c on d.id = c.document_id GROUP BY d.id ORDER BY d.created_at DESC `;
+
+    const result = await this.pool.query(query);
+
+    return result.rows;
   }
 
   async close(): Promise<void> {

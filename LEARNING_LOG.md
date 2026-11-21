@@ -138,5 +138,9 @@ This document tracks personal learning milestones, concepts mastered, mistakes m
   - Completed Phase 4 end-to-end RAG pipeline and verified with 35 passing unit/integration tests and live demo.
 - **Mistakes & Misunderstandings**:
   - None.
-- **Open Questions / Confusions**:
-  - How pure vector search struggles with exact keywords, part numbers, and error codes, and how hybrid search (BM25 + RRF) solves it.
+### [2026-11-21] - Strategic Roadmap Adjustment: Full-Stack Prioritization
+- **Strategic Decision**:
+  - Pivoting directly to Phase 4.5 (Express REST/SSE API) and Phase 4.6 (Next.js UI) before advancing to Phase 5 (Hybrid Search & Reranking).
+  - Rationale: Building a visible, usable full-stack application with file uploads, real-time token streaming, and clickable citation UI provides immediate portfolio value for 2026 AI Application Engineer roles. Furthermore, experiencing search failure modes live in the UI makes hybrid search and reranking far more intuitive to implement as concrete feature upgrades later.
+- **What I Implemented**:
+  - Updated `LEARNING_ROADMAP.md` establishing Phase 4.5 and Phase 4.6.

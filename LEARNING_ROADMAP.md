@@ -11,10 +11,12 @@ flowchart TD
     P1["Phase 1: LLM & Vector Fundamentals"] --> P2["Phase 2: Document Ingestion Pipeline"]
     P2 --> P3["Phase 3: Vector Storage & pgvector"]
     P3 --> P4["Phase 4: Core RAG Pipeline"]
-    P4 --> P5["Phase 5: Advanced Retrieval & Reranking"]
+    P4 --> P45["Phase 4.5: Production Express API & Streaming"]
+    P45 --> P46["Phase 4.6: Next.js Interactive Frontend"]
+    P46 --> P5["Phase 5: Advanced Retrieval & Reranking"]
     P5 --> P6["Phase 6: Systematic RAG Evaluation"]
     P6 --> P7["Phase 7: Production Backend Engineering"]
-    P7 --> P8["Phase 8: Agents & Framework Trade-offs"]
+    P7 --> P8["Phase 8: AI Frameworks & Agentic RAG"]
 ```
 
 ---
@@ -90,7 +92,36 @@ flowchart TD
 
 ---
 
-### Phase 5: Advanced Retrieval & Reranking
+### Phase 4.5: Production Express API & Streaming (Current)
+* **Goal**: Expose ingestion and RAG engines via a typed REST API with real-time Server-Sent Events (SSE) token streaming.
+* **Prerequisites**: Express, Node.js streams, HTTP fundamentals.
+* **Concepts**:
+  - Multipart file uploads (`multer`) with buffer-to-pipeline processing
+  - Server-Sent Events (SSE) for real-time word-by-word token streaming from Gemini
+  - Structured error handling and graceful database shutdowns
+  - RESTful document lifecycle management (`/api/documents`)
+* **Milestone**:
+  - [ ] Set up Express app with CORS and JSON middleware
+  - [ ] Implement `POST /api/documents/upload` (accepts PDF/MD/TXT, ingests into pgvector)
+  - [ ] Implement `GET /api/documents` and `DELETE /api/documents/:id`
+  - [ ] Implement `POST /api/chat` (standard JSON Q&A)
+  - [ ] Implement `GET /api/chat/stream` or `POST /api/chat/stream` (real-time SSE streaming)
+  - [ ] Automated integration test suite for API endpoints
+
+---
+
+### Phase 4.6: Next.js Interactive Frontend
+* **Goal**: Build a clean, responsive UI with drag-and-drop file upload, live chat streaming, and clickable citations.
+* **Prerequisites**: React, Next.js App Router, Tailwind CSS.
+* **Concepts**:
+  - Handling multipart uploads with progress states
+  - Consuming SSE streams in React using `fetch` + `ReadableStreamDefaultReader`
+  - Interactive citation badges linking to source document passages
+  - Document management drawer
+
+---
+
+### Phase 5: Advanced Retrieval & Reranking (Upgrades)
 * **Goal**: Overcome the core failure modes of naive vector search.
 * **Prerequisites**: Phase 4 completed, probability and ranking metrics.
 * **Concepts**:

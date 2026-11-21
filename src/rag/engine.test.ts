@@ -25,6 +25,9 @@ class MockVectorStore implements IVectorStore {
     return this.searchResults;
   }
   async deleteDocument(): Promise<void> {}
+  async listDocument(): Promise<any[]> {
+    return [];
+  }
   async close(): Promise<void> {}
 }
 
