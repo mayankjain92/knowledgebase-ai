@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+import mammoth from "mammoth";
 import { DocumentParser } from "./parser.js";
 
 describe("DocumentParser", () => {
@@ -19,6 +20,21 @@ describe("DocumentParser", () => {
     expect(parsedMd.title).toBe("guide");
     expect(parsedMd.format).toBe("md");
     expect(parsedMd.content).toContain("# Title");
+  });
+
+  it("should parse docx buffers using mammoth", async () => {
+    const spy = vi.spyOn(mammoth, "convertToMarkdown").mockResolvedValueOnce({
+      value: "# Word Document\n\nThis is content extracted from docx.",
+      messages: [],
+    });
+
+    const buffer = Buffer.from("mock-docx-data");
+    const parsed = await parser.parse(buffer, "policy.docx");
+
+    expect(parsed.title).toBe("policy");
+    expect(parsed.format).toBe("docx");
+    expect(parsed.content).toContain("# Word Document");
+    expect(spy).toHaveBeenCalled();
   });
 
   it("should throw an error for empty buffers", async () => {

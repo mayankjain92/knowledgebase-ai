@@ -1,7 +1,8 @@
+import mammoth from "mammoth";
 import { PDFParse } from "pdf-parse";
 import { IngestionDocument } from "./pipeline.js";
 
-export type SupportedFormat = "txt" | "md" | "pdf";
+export type SupportedFormat = "txt" | "md" | "pdf" | "docx";
 
 export interface ParsedDocument {
   id: string;
@@ -47,6 +48,10 @@ export class DocumentParser implements IDocumentParser {
 
     if (format === "pdf") {
       return this.parsePdf(buffer, id, title, filename);
+    }
+
+    if (format === "docx") {
+      return this.parseDocx(buffer, id, title, filename);
     }
 
     throw new Error(`Unsupported file format for: ${filename}`);
@@ -98,10 +103,34 @@ export class DocumentParser implements IDocumentParser {
     }
   }
 
+  private async parseDocx(
+    buffer: Buffer,
+    id: string,
+    title: string,
+    filename: string,
+  ): Promise<ParsedDocument> {
+    const result = await mammoth.convertToMarkdown({ buffer });
+    const content =
+      result.value || (await mammoth.extractRawText({ buffer })).value;
+
+    return {
+      id,
+      title,
+      content,
+      format: "docx",
+      totalPages: 1,
+      metadata: {
+        filename,
+        sizeBytes: buffer.length,
+      },
+    };
+  }
+
   private detectFormat(filename: string): SupportedFormat {
     const ext = filename.split(".").pop()?.toLowerCase();
     if (ext === "md" || ext === "markdown") return "md";
     if (ext === "pdf") return "pdf";
+    if (ext === "docx") return "docx";
     if (ext === "txt") return "txt";
 
     return "txt";

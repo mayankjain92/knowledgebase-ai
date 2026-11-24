@@ -51,7 +51,7 @@ flowchart TD
   - [x] Build a modular recursive character chunker in TypeScript without external RAG frameworks
   - [x] Connect chunking pipeline to batch embedding generation and metadata enrichment
   - [x] Implement text sanitization and cleaning (control chars, null bytes, line wraps, whitespace)
-  - [x] Implement file extraction (Markdown/Plaintext/PDF)
+  - [x] Implement file extraction (Markdown/Plaintext/PDF/DOCX)
   - [x] Knowledge verification questions passed
 
 ---
@@ -110,14 +110,22 @@ flowchart TD
 
 ---
 
-### Phase 4.6: Next.js Interactive Frontend (Current)
-* **Goal**: Build a clean, responsive UI with drag-and-drop file upload, live chat streaming, and clickable citations.
-* **Prerequisites**: React, Next.js App Router, Tailwind CSS.
+### Phase 4.6: Next.js Interactive Frontend (Completed)
+* **Goal**: Build a clean, responsive UI with file upload (.pdf, .docx, .md, .txt), live chat streaming, interactive in-text citations, and source verification.
+* **Prerequisites**: React, Next.js App Router, Tailwind CSS, `@assistant-ui/react`.
 * **Concepts**:
-  - Handling multipart uploads with progress states
-  - Consuming SSE streams in React using `fetch` + `ReadableStreamDefaultReader`
-  - Interactive citation badges linking to source document passages
-  - Document management drawer
+  - Consuming SSE streams in assistant-ui via `ChatModelAdapter` and `useLocalRuntime`
+  - In-text citation parsing and interactive pill badge rendering (`[1]`, `[2]`, etc.)
+  - Smooth anchor navigation linking citations directly to source passage cards
+  - Formatting structured source cards with similarity match percentages
+  - Multi-format ingestion UX with document lifecycle management
+* **Milestone**:
+  - [x] Assistant-UI integration with custom thread and adapter streaming
+  - [x] Real-time SSE streaming consumption (`POST /api/chat/stream`)
+  - [x] Interactive in-text citation badges linking to referenced sources
+  - [x] Structured Referenced Sources cards with similarity match percentages
+  - [x] Knowledge Base sidebar with document management, upload dropzone (.pdf, .docx, .md, .txt), and stats
+  - [x] Starter prompt suggestions on Welcome Screen
 
 ---
 

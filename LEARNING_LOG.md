@@ -159,3 +159,21 @@ This document tracks personal learning milestones, concepts mastered, mistakes m
   - Verified live SSE streaming against PostgreSQL and Gemini with real-time token output.
 - **Mistakes & Misunderstandings**:
   - Understood the importance of checking `res.headersSent` before sending error responses during streaming: once headers are sent as `text/event-stream`, HTTP status cannot be changed to 500, so errors must be piped as SSE events.
+
+### [2026-11-24] - Phase 4.6: Next.js Interactive Frontend & assistant-ui Integration Completed
+- **What I Learned**:
+  - **Assistant-UI Architecture & `ChatModelAdapter`**: Learned how `@assistant-ui/react` decouples conversational UX primitives from model backends using an `async *run({ messages, abortSignal })` generator. Consuming our backend's SSE stream via `reader.read()` and yielding `{ content: [{ type: "text", text }] }` provides buttery-smooth streaming.
+  - **In-Text Citation Parsing & Linkification**: Gemini outputs citations as bracketed text (e.g. `[1, 2]`, `[4, 5]`). Transforming these into structured markdown anchor targets `[1](#source-1)` allows custom React markdown components to render interactive citation badge pills.
+  - **Interactive Anchor Navigation & Highlight Rings**: Clicking an in-text citation smoothly scrolls the viewport to the target source card and applies a temporary highlight ring (`ring-2 ring-primary`) so the user immediately sees the ground-truth excerpt.
+  - **DOCX Extraction with Mammoth**: `.docx` files are zipped XML archives. Using `mammoth.convertToMarkdown({ buffer })` extracts body text while preserving markdown headings, enabling our recursive chunker to respect natural section boundaries.
+  - **Tailwind CSS v4 & Dark Mode Scoping**: Tailwind v4 uses `@custom-variant dark (&:is(.dark *))`. Applying `className="dark"` to `<html lang="en">` ensures all design tokens (`--background`, `--sidebar`, `--card`) propagate uniformly across third-party component libraries.
+- **What I Implemented**:
+  - Added `.docx` extraction support in `DocumentParser` and unit tests in `parser.test.ts`.
+  - Configured `@assistant-ui/react` with Base UI Nova preset in `web/src/components/assistant-ui/`.
+  - Implemented `ragChatAdapter` in `web/src/lib/rag-chat-adapter.ts` with streaming token consumption, citation linkification, and structured source cards with similarity scores.
+  - Created `KnowledgeBaseWelcome` in `web/src/components/assistant-ui/knowledgebase-welcome.tsx` with hero branding and clickable prompt starter cards.
+  - Enhanced `web/src/components/assistant-ui/elements/markdown-text.tsx` with custom citation badge pills, smooth scrolling, and formatted source cards.
+  - Built enterprise dashboard layout in `web/src/app/page.tsx` with document management, file format badges (PDF, DOCX, MD, TXT), search filtering, and live pgvector stats.
+  - Verified in browser with full automated tests and visual evidence. All 40 backend tests pass.
+- **Mistakes & Misunderstandings**:
+  - Discovered that mammoth lacks an official `@types/mammoth` package on npm; solved by writing clean ambient type declarations in `src/types/mammoth.d.ts`.
